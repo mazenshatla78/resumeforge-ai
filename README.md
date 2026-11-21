@@ -76,3 +76,4 @@ Set `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `STRIPE_WEBHOOK_SECRET` in `.env` an
 ## License
 Proprietary — all rights reserved. Built to be sold.
 "# resumeforge-ai" 
+"# resumeforge-ai" 
