@@ -14,6 +14,7 @@
   to = "https://onrender.com"
   status = 200
   force = true
+  
 
 # 3. SPA fallback for frontend routes
 [[redirects]]
