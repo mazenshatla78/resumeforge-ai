@@ -1,14 +1,22 @@
-# Netlify Configuration for ResumeForge AI Frontend
-
 [build]
   publish = "frontend"
   command = ""
 
+# 1. Map /static/* requests on Netlify to the root of the frontend folder
+[[redirects]]
+  from = "/static/*"
+  to = "/:splat"
+  status = 200
+
+# 2. Proxy /api/* requests directly to your Render backend (avoids CORS & env var issues)
+[[redirects]]
+  from = "/api/*"
+  to = "https://onrender.com"
+  status = 200
+  force = true
+
+# 3. SPA fallback for frontend routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-
-[build.environment]
-  # Set your backend URL here or in Netlify dashboard:
-  # API_BASE_URL = "https://your-backend-url.com"
