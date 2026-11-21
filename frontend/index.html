@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ResumeForge AI — Beat the ATS. Land the interview.</title>
+<meta name="description" content="AI-powered resume optimizer, ATS score, tailored cover letters, and interview prep." />
+<link rel="stylesheet" href="/static/output.css" />
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="bg-ink-50 text-ink-900 font-sans antialiased min-h-screen">
+
+<!-- Top nav -->
+<nav class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-ink-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <img src="/static/logo.svg" alt="ResumeForge AI" class="w-8 h-8" />
+      <span class="font-bold text-lg">ResumeForge <span class="text-brand-600">AI</span></span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="/#features" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">Features</a>
+      <a href="/pricing" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">Pricing</a>
+      <a href="/#how" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">How it works</a>
+      <a href="/about" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">About</a>
+      <a href="/contact" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">Contact</a>
+    </div>
+    <div id="nav-auth" class="flex items-center gap-2">
+      <a href="/login" class="px-4 py-2 rounded-lg text-sm font-medium hover:bg-ink-100">Sign in</a>
+      <a href="/signup" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Get started</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Landing (shown when logged out) -->
+<div id="landing" class="hidden">
+<section id="hero" class="relative overflow-hidden bg-hero-gradient">
+  <!-- animated shapes -->
+  <div class="shape-blob w-72 h-72 bg-brand-400 top-10 -left-20 float"></div>
+  <div class="shape-blob w-96 h-96 bg-purple-400 bottom-0 right-0 float" style="animation-delay:2s"></div>
+  <div class="shape-grid absolute inset-0 opacity-60"></div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 grid lg:grid-cols-2 gap-12 items-center">
+    <div class="fade-in">
+      <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass text-brand-700 text-sm font-medium shadow-sm">✨ AI-powered job application copilot</span>
+      <h1 class="mt-6 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight">
+        Beat the ATS.<br/><span class="bg-gradient-to-r from-brand-500 to-purple-600 bg-clip-text text-transparent">Land the interview.</span>
+      </h1>
+      <p class="mt-5 text-lg text-ink-500 max-w-xl">Upload your resume, paste a job description, and get an instant ATS match score, a tailored resume rewrite, a custom cover letter, and interview prep — in seconds.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <button onclick="showAuth('register')" class="px-6 py-3 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 text-white font-semibold hover:shadow-lg hover:shadow-brand-600/30 transition transform hover:-translate-y-0.5">Get started free</button>
+        <button onclick="showAuth('login')" class="px-6 py-3 rounded-xl bg-white/80 backdrop-blur border border-ink-200 font-semibold hover:bg-white transition">Sign in</button>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-6 text-sm text-ink-500">
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-green-500 pulse-glow"></span><span class="font-bold text-ink-900">3</span> free optimizations / month</div>
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-brand-500 pulse-glow"></span><span class="font-bold text-ink-900">No</span> credit card required</div>
+        <div class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-purple-500 pulse-glow"></span><span class="font-bold text-ink-900">AI</span> in seconds</div>
+      </div>
+    </div>
+    <div class="relative slide-up">
+      <div class="rounded-2xl bg-white/80 backdrop-blur shadow-2xl border border-white/60 p-6 float">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-sm font-medium text-ink-500">ATS Match Score</span>
+          <span class="text-2xl font-extrabold bg-gradient-to-r from-brand-500 to-purple-600 bg-clip-text text-transparent">87%</span>
+        </div>
+        <div class="h-3 bg-ink-100 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-brand-400 to-purple-500" style="width:87%"></div></div>
+        <div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+          <div class="p-3 rounded-lg bg-green-50 text-green-700 border border-green-100">✓ 14 keywords matched</div>
+          <div class="p-3 rounded-lg bg-amber-50 text-amber-700 border border-amber-100">! 6 keywords missing</div>
+          <div class="p-3 rounded-lg bg-blue-50 text-blue-700 border border-blue-100">↑ Impact verbs boosted</div>
+          <div class="p-3 rounded-lg bg-purple-50 text-purple-700 border border-purple-100">★ Cover letter ready</div>
+        </div>
+        <div class="mt-5 pt-4 border-t border-ink-100 flex items-center justify-between text-xs text-ink-400">
+          <span>Powered by Groq · openai/gpt-oss-120b</span>
+          <span class="text-brand-600 font-medium">~14s analysis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12 fade-in">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Real problems job seekers face — and how we solve them</h2>
+      <p class="mt-4 text-ink-500">Backed by research across 10,000+ resume scans and thousands of job seekers.</p>
+    </div>
+    <div id="problems-grid" class="grid md:grid-cols-2 gap-6"></div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section id="how" class="py-20 bg-hero-gradient">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">How it works</h2>
+      <p class="mt-4 text-ink-500">Three steps from resume to interview-ready.</p>
+    </div>
+    <div id="steps-grid" class="grid md:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center max-w-2xl mx-auto mb-12">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Everything you need to land the interview</h2>
+      <p class="mt-4 text-ink-500">One platform. Every step of the application process.</p>
+    </div>
+    <div id="reviews-grid" class="grid md:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="py-20 bg-ink-50">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl sm:text-4xl font-extrabold">Frequently asked questions</h2>
+    </div>
+    <div id="faq-list" class="space-y-3"></div>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section class="py-20 bg-gradient-to-br from-brand-600 to-purple-700 text-white relative overflow-hidden">
+  <div class="shape-blob w-96 h-96 bg-white/20 -top-20 -right-20 float"></div>
+  <div class="relative max-w-4xl mx-auto px-4 text-center">
+    <h2 class="text-3xl sm:text-4xl font-extrabold">Ready to beat the ATS?</h2>
+    <p class="mt-4 text-white/80 text-lg">Join thousands of job seekers who land more interviews with ResumeForge AI.</p>
+    <div class="mt-8 flex flex-wrap justify-center gap-3">
+      <button onclick="showAuth('register')" class="px-6 py-3 rounded-xl bg-white text-brand-700 font-semibold hover:bg-ink-50 transition">Get started free</button>
+      <button onclick="showAuth('login')" class="px-6 py-3 rounded-xl bg-white/10 backdrop-blur border border-white/30 font-semibold hover:bg-white/20 transition">Sign in</button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-ink-900 text-ink-300 py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <div>
+      <div class="font-bold text-white mb-2">ResumeForge AI</div>
+      <p class="text-sm">Beat the ATS. Land the interview.</p>
+    </div>
+    <div>
+      <div class="font-semibold text-white mb-2">Product</div>
+      <ul class="text-sm space-y-1"><li><a href="#" onclick="showAuth('register')" class="hover:text-white">Get started</a></li><li><a href="/privacy" class="hover:text-white">Privacy</a></li></ul>
+    </div>
+    <div>
+      <div class="font-semibold text-white mb-2">Resources</div>
+      <ul class="text-sm space-y-1"><li class="hover:text-white">ATS tips</li><li class="hover:text-white">Resume guides</li></ul>
+    </div>
+    <div>
+      <div class="font-semibold text-white mb-2">Contact</div>
+      <p class="text-sm">mazenshatla78@gmail.com</p>
+    </div>
+  </div>
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 pt-6 border-t border-ink-700 text-xs text-ink-500">
+    © 2026 ResumeForge AI. All rights reserved.
+  </div>
+</footer>
+
+</div>
+
+<!-- Auth modal -->
+<div id="auth-modal" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 modal-backdrop">
+  <div class="bg-white rounded-2xl w-full max-w-md p-7 shadow-2xl modal-panel">
+    <div class="flex items-center justify-between mb-5">
+      <h2 id="auth-title" class="text-xl font-bold">Sign in</h2>
+      <button onclick="closeAuth()" class="text-ink-400 hover:text-ink-700 text-2xl leading-none">&times;</button>
+    </div>
+    <div id="auth-error" class="hidden mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm"></div>
+    <form id="auth-form" onsubmit="submitAuth(event)">
+      <div id="name-field" class="hidden mb-3">
+        <label class="block text-sm font-medium mb-1">Name</label>
+        <input name="name" class="w-full px-3 py-2 rounded-lg border border-ink-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" />
+      </div>
+      <div class="mb-3">
+        <label class="block text-sm font-medium mb-1">Email</label>
+        <input name="email" type="email" required class="w-full px-3 py-2 rounded-lg border border-ink-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" />
+      </div>
+      <div class="mb-5">
+        <label class="block text-sm font-medium mb-1">Password</label>
+        <input name="password" type="password" required minlength="6" class="w-full px-3 py-2 rounded-lg border border-ink-200 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" />
+      </div>
+      <button type="submit" class="w-full py-2.5 rounded-xl bg-brand-600 text-white font-semibold hover:bg-brand-700">Continue</button>
+    </form>
+    <p class="mt-4 text-sm text-center text-ink-500">
+      <span id="auth-switch-text">No account?</span>
+      <button onclick="toggleAuthMode()" class="text-brand-600 font-medium hover:underline" id="auth-switch-btn">Create one</button>
+    </p>
+  </div>
+</div>
+
+<!-- App shell -->
+<div id="app" class="hidden min-h-screen flex bg-ink-50">
+  <!-- Sidebar -->
+  <aside id="sidebar" class="hidden md:flex md:flex-col w-64 bg-white border-r border-ink-100 fixed md:static inset-y-0 left-0 z-40 transform -translate-x-full md:translate-x-0 transition-transform duration-200">
+    <div class="h-16 flex items-center gap-2 px-5 border-b border-ink-100">
+      <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-sm">R</div>
+      <span class="font-bold">ResumeForge <span class="text-brand-600">AI</span></span>
+    </div>
+    <nav id="sidebar-links" class="flex-1 px-3 py-4 space-y-1 overflow-y-auto"></nav>
+    <div class="px-4 py-4 border-t border-ink-100">
+      <div id="sidebar-user" class="text-xs text-ink-500"></div>
+    </div>
+  </aside>
+  <div class="flex-1 flex flex-col min-w-0">
+    <!-- Topbar -->
+    <header class="sticky top-0 z-30 bg-white/80 backdrop-blur border-b border-ink-100 h-16 flex items-center justify-between px-4 sm:px-6">
+      <button id="menu-btn" class="md:hidden p-2 rounded-lg hover:bg-ink-100" onclick="toggleSidebar()">☰</button>
+      <div class="flex-1"></div>
+      <div id="topbar-auth" class="flex items-center gap-3"></div>
+    </header>
+    <!-- Content -->
+    <main id="content" class="flex-1 px-4 sm:px-6 lg:px-8 py-6 overflow-x-hidden"></main>
+  </div>
+  <!-- Mobile sidebar backdrop -->
+  <div id="sidebar-backdrop" class="hidden fixed inset-0 bg-black/40 z-30 md:hidden" onclick="toggleSidebar()"></div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="hidden fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-lg text-sm font-medium"></div>
+
+<script src="/static/config.js"></script>
+<script src="/static/app.js?v=2"></script>
+</body>
+</html>

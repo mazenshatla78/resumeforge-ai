@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pricing — ResumeForge AI</title>
+<script src="/static/tailwind-browser.js"></script>
+<style type="text/tailwindcss">
+  @import "tailwindcss";
+  @theme {
+    --color-brand-50:#eef6ff; --color-brand-100:#d9eaff; --color-brand-200:#bcd8ff; --color-brand-300:#8ebcff; --color-brand-400:#5a99ff; --color-brand-500:#2f74ff; --color-brand-600:#1d5ae6; --color-brand-700:#1745b8; --color-brand-800:#183a92; --color-brand-900:#183373;
+    --color-ink-50:#f7f8fa; --color-ink-100:#eef0f4; --color-ink-200:#d9dde5; --color-ink-300:#b5bcc9; --color-ink-400:#8a93a6; --color-ink-500:#646d82; --color-ink-600:#4a5266; --color-ink-700:#363c4d; --color-ink-800:#242938; --color-ink-900:#161a26;
+  }
+</style>
+<link rel="stylesheet" href="/static/styles.css" />
+<script src="/static/config.js"></script>
+<style>
+.card { background:#fff; border-radius:16px; border:1px solid #eef0f4; box-shadow:0 1px 3px rgba(0,0,0,.06); padding:24px; }
+.input { width:100%; padding:10px 12px; border-radius:8px; border:1px solid #d9dde5; background:#fff; outline:none; font-size:14px; }
+.label { display:block; font-size:14px; font-weight:500; color:#363c4d; margin-bottom:4px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:10px 20px; border-radius:8px; font-weight:500; transition:all .15s ease; cursor:pointer; border:1px solid transparent; }
+.btn-primary { background:#1d5ae6; color:#fff; border-color:#1d5ae6; }
+.btn-primary:hover { background:#1745b8; box-shadow:0 4px 12px rgba(29,90,230,.3); }
+.btn-ghost { background:#fff; border-color:#d9dde5; color:#363c4d; }
+.btn-ghost:hover { background:#f7f8fa; }
+</style>
+</head>
+<body class="bg-ink-50 font-sans antialiased min-h-screen">
+<nav class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-ink-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <img src="/static/logo.svg" alt="ResumeForge AI" class="w-8 h-8" />
+      <span class="font-bold text-lg">ResumeForge <span class="text-brand-600">AI</span></span>
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/about" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">About</a>
+      <a href="/contact" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">Contact</a>
+      <a href="/login" class="px-4 py-2 rounded-xl bg-white border border-ink-200 text-sm font-medium hover:bg-ink-50">Sign in</a>
+      <a href="/signup" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Sign up</a>
+    </div>
+  </div>
+</nav>
+
+<main class="max-w-6xl mx-auto px-4 py-16">
+  <div class="text-center mb-10">
+    <h1 class="text-4xl font-extrabold">Simple, transparent pricing</h1>
+    <p class="mt-4 text-ink-500 text-lg">Choose the plan that fits your job search. Cancel anytime.</p>
+  </div>
+
+  <!-- Billing toggle -->
+  <div class="flex justify-center mb-10">
+    <div class="bg-ink-100 rounded-xl p-1 inline-flex">
+      <button id="toggle-monthly" class="px-5 py-2 rounded-lg text-sm font-medium bg-white shadow-sm" onclick="setBilling('month')">Monthly</button>
+      <button id="toggle-yearly" class="px-5 py-2 rounded-lg text-sm font-medium text-ink-500" onclick="setBilling('year')">Yearly <span class="text-green-600 text-xs">(save 20%)</span></button>
+    </div>
+  </div>
+
+  <!-- Pricing cards -->
+  <div id="pricing-cards" class="grid md:grid-cols-3 gap-6"></div>
+
+  <!-- FAQ -->
+  <div class="mt-16 text-center">
+    <p class="text-ink-500 text-sm">All plans include a 3-day money-back guarantee. Questions? <a href="/contact" class="text-brand-600 hover:underline">Contact us</a>.</p>
+  </div>
+</main>
+
+<script src="/static/config.js"></script>
+<!-- Paddle.js -->
+<script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+<script>
+  const API = (window.API_BASE_URL || "").replace(/\/$/, "");
+  // Config from backend
+  let paddleEnv = null;
+  let paddleToken = null;
+  let country = null;
+  let tiers = [];
+  let billingPeriod = 'month';
+
+  async function init() {
+    try {
+      const configResp = await fetch(API + '/api/billing/paddle-config');
+      if (!configResp.ok) throw new Error('Paddle not configured');
+      const config = await configResp.json();
+      paddleEnv = config.environment;
+      paddleToken = config.clientToken;
+
+      // Initialize Paddle
+      Paddle.Environment.set(paddleEnv === 'production' ? 'production' : 'sandbox');
+      Paddle.Initialize({ token: paddleToken });
+
+      // Detect country server-side
+      const countryResp = await fetch(API + '/api/billing/country');
+      const countryData = await countryResp.json();
+      country = countryData.country || null; // null = auto-detect
+
+      // Fetch price IDs
+      const pricesResp = await fetch(API + '/api/billing/paddle-prices');
+      const pricesData = await pricesResp.json();
+      tiers = pricesData.tiers;
+
+      renderCards();
+    } catch (e) {
+      document.getElementById('pricing-cards').innerHTML = '<div class="col-span-3 text-center text-red-700 p-6">Pricing is temporarily unavailable. Please try again later.</div>';
+    }
+  }
+
+  function setBilling(period) {
+    billingPeriod = period;
+    document.getElementById('toggle-monthly').className = period === 'month' ? 'px-5 py-2 rounded-lg text-sm font-medium bg-white shadow-sm' : 'px-5 py-2 rounded-lg text-sm font-medium text-ink-500';
+    document.getElementById('toggle-yearly').className = period === 'year' ? 'px-5 py-2 rounded-lg text-sm font-medium bg-white shadow-sm' : 'px-5 py-2 rounded-lg text-sm font-medium text-ink-500';
+    renderCards();
+  }
+
+  async function renderCards() {
+    const container = document.getElementById('pricing-cards');
+    container.innerHTML = '<div class="col-span-3 text-center text-ink-400 p-6">Loading prices...</div>';
+
+    const priceIds = tiers.map(t => billingPeriod === 'month' ? t.priceId.month : t.priceId.year);
+
+    try {
+      // Fetch prices from Paddle
+      const previewParams = { items: priceIds.map(id => ({ priceId: id, quantity: 1 })) };
+      if (country) previewParams.customerCountryCode = country;
+
+      const prices = await Paddle.PricePreview(previewParams);
+
+      container.innerHTML = tiers.map((tier, i) => {
+        const priceData = prices.data?.items?.[i];
+        const formattedTotal = priceData?.formattedTotals?.total || '—';
+        const formattedTax = priceData?.formattedTotals?.tax || '';
+        const isPro = tier.name === 'Pro';
+        return `
+          <div class="card p-6 ${isPro ? 'border-brand-500 shadow-lg ring-2 ring-brand-500/20 relative' : ''}">
+            ${isPro ? '<div class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-brand-600 text-white text-xs font-semibold">Most popular</div>' : ''}
+            <h3 class="text-xl font-bold">${tier.name}</h3>
+            <p class="text-sm text-ink-500 mt-1">${tier.description}</p>
+            <div class="mt-4">
+              <span class="text-3xl font-extrabold">${formattedTotal}</span>
+              <span class="text-ink-400 text-sm">/${billingPeriod === 'month' ? 'mo' : 'yr'}</span>
+            </div>
+            ${formattedTax ? `<div class="text-xs text-ink-400 mt-1">incl. ${formattedTax} tax</div>` : ''}
+            <ul class="mt-5 space-y-2 text-sm text-ink-700">
+              ${tier.features.map(f => `<li class="flex items-center gap-2"><span class="text-green-500">✓</span> ${f}</li>`).join('')}
+            </ul>
+            <button onclick="subscribe('${tier.priceId[billingPeriod === 'month' ? 'month' : 'year']}')" class="w-full mt-6 py-2.5 rounded-xl ${isPro ? 'bg-gradient-to-r from-brand-600 to-brand-700 text-white hover:shadow-lg' : 'bg-ink-100 text-ink-700 hover:bg-ink-200'} font-semibold transition">
+              Subscribe
+            </button>
+          </div>`;
+      }).join('');
+    } catch (e) {
+      container.innerHTML = '<div class="col-span-3 text-center text-red-700 p-6">Failed to load prices. Please try again.</div>';
+    }
+  }
+
+  function subscribe(priceId) {
+    // Get user email if signed in
+    let email = null;
+    const token = localStorage.getItem('rf_token');
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        email = payload.email;
+      } catch {}
+    }
+
+    Paddle.Checkout.open({
+      items: [{ priceId: priceId, quantity: 1 }],
+      customer: email ? { email: email } : undefined,
+      settings: {
+        displayMode: 'overlay',
+        variant: 'one-page',
+        successUrl: window.location.origin + '/welcome',
+      },
+    });
+  }
+
+  // Listen for checkout success
+  Paddle.Initialize({ eventCallback: function(event) {
+    if (event.name === 'checkout.completed') {
+      window.location.href = '/welcome';
+    }
+  }});
+
+  init();
+</script>
+</body>
+</html>

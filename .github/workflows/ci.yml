@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run tests
+        env:
+          JWT_SECRET: test-secret-key-for-ci
+          DATABASE_URL: sqlite:///./test_ci.db
+          GROQ_API_KEY: ""
+          ADMIN_BOOTSTRAP_SECRET: test-bootstrap
+          RATE_LIMIT_AUTH: "1000/minute"
+          RATE_LIMIT_AI: "1000/minute"
+          ALLOWED_ORIGINS: "http://localhost:8000"
+        run: python -m pytest -q

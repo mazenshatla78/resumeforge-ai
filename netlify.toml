@@ -1,0 +1,14 @@
+# Netlify Configuration for ResumeForge AI Frontend
+
+[build]
+  publish = "frontend"
+  command = ""
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  # Set your backend URL here or in Netlify dashboard:
+  # API_BASE_URL = "https://your-backend-url.com"

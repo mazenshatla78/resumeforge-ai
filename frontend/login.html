@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Sign in — ResumeForge AI</title>
+<link rel="stylesheet" href="/static/output.css" />
+<link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body class="bg-hero-gradient min-h-screen font-sans antialiased">
+<nav class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-ink-100">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2">
+      <img src="/static/logo.svg" alt="ResumeForge AI" class="w-8 h-8" />
+      <span class="font-bold text-lg">ResumeForge <span class="text-brand-600">AI</span></span>
+    </a>
+    <div class="flex items-center gap-2">
+      <a href="/about" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">About</a>
+      <a href="/contact" class="px-3 py-2 text-sm text-ink-600 hover:text-ink-900">Contact</a>
+      <a href="/signup" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-sm font-medium hover:bg-brand-700">Sign up</a>
+    </div>
+  </div>
+</nav>
+<main class="min-h-[calc(100vh-4rem)] grid lg:grid-cols-2">
+  <!-- Left: form -->
+  <div class="flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md fade-in">
+      <div class="card p-8 shadow-xl">
+        <h1 class="text-2xl font-bold mb-1">Welcome back</h1>
+        <p class="text-ink-500 text-sm mb-6">Sign in to continue to your dashboard.</p>
+        <div id="err" class="hidden mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm"></div>
+        <form id="login-form" class="space-y-4">
+          <div>
+            <label class="label">Email</label>
+            <input name="email" type="email" required class="input" placeholder="you@example.com" />
+          </div>
+          <div>
+            <label class="label">Password</label>
+            <input name="password" type="password" required class="input" placeholder="••••••••" />
+          </div>
+          <div class="flex items-center justify-between text-sm">
+            <label class="flex items-center gap-2"><input type="checkbox" /> Remember me</label>
+            <a href="/forgot-password" class="text-brand-600 hover:underline">Forgot password?</a>
+          </div>
+          <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 text-white font-semibold hover:shadow-lg transition">Sign in</button>
+        </form>
+        <p class="mt-5 text-sm text-center text-ink-500">No account? <a href="/signup" class="text-brand-600 font-medium hover:underline">Create one free</a></p>
+      </div>
+    </div>
+  </div>
+  <!-- Right: branded visual -->
+  <div class="hidden lg:flex items-center justify-center bg-gradient-to-br from-brand-600 to-purple-700 relative overflow-hidden">
+    <div class="shape-blob w-96 h-96 bg-white/20 top-10 -right-20 float"></div>
+    <div class="shape-blob w-72 h-72 bg-purple-400/30 bottom-10 left-10 float" style="animation-delay:2s"></div>
+    <div class="relative text-center text-white px-10 max-w-md">
+      <div class="text-6xl mb-4">🎯</div>
+      <h2 class="text-3xl font-extrabold mb-3">Beat the ATS. Land the interview.</h2>
+      <p class="text-white/80">Join thousands of job seekers who use ResumeForge AI to optimize their resumes, generate cover letters, and prepare for interviews.</p>
+      <div class="mt-8 grid grid-cols-3 gap-4 text-sm">
+        <div class="glass rounded-xl p-3"><div class="font-bold text-xl">71%</div><div class="text-white/70 text-xs">resumes rejected by ATS</div></div>
+        <div class="glass rounded-xl p-3"><div class="font-bold text-xl">87%</div><div class="text-white/70 text-xs">avg score boost</div></div>
+        <div class="glass rounded-xl p-3"><div class="font-bold text-xl">14s</div><div class="text-white/70 text-xs">per analysis</div></div>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="/static/config.js"></script>
+<script>
+  const API = (window.API_BASE_URL || "").replace(/\/$/, "");
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target);
+    try {
+      const res = await fetch(API + "/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: fd.get("email"), password: fd.get("password") }) });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Login failed");
+      localStorage.setItem("rf_token", data.token);
+      window.location.href = "/";
+    } catch (err) {
+      const el = document.getElementById("err"); el.textContent = err.message; el.classList.remove("hidden");
+    }
+  });
+</script>
+</body>
+</html>
